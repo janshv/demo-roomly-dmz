@@ -1,0 +1,18 @@
+import os
+from pages.factories.page_factory import PageFactory
+import pytest
+
+
+@pytest.fixture(scope="session")
+def base_url(pytestconfig):
+    """CLI --base-url takes precedence over BASE_URL and the demo address."""
+    return (
+        pytestconfig.getoption("--base-url")
+        or os.environ.get("BASE_URL")
+        or "https://rcsi-science.github.io/demo-roomly/"
+    )
+
+
+@pytest.fixture
+def page_factory(page, base_url):
+    return PageFactory(page, base_url)
